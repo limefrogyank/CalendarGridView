@@ -338,3 +338,6 @@ ASALocalRun/
 
 # BeatPulse healthcheck temp database
 healthchecksdb
+/CalendarGridView/CalendarGridView.LMcPherson.1.0.0.nuspec
+/CalendarGridView/global.json
+/CalendarGridView/nuget.exe

@@ -6,7 +6,7 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("CalendarGridView")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("This is a control that creates a scrolling calendar that is data virtualized.  You can place anything within the calendar date boxes and drag and drop is supported.")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("CalendarGridView")]

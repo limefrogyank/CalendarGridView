@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package >
+  <metadata>
+    <id>$id$</id>
+    <version>$version$</version>
+    <title>$title$</title>
+    <authors>Lee McPherson</authors>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <license type="expression">MIT</license>
+    <projectUrl>https://github.com/limefrogyank/CalendarGridView</projectUrl>
+    <description>This is a control that creates a scrolling calendar that is data virtualized.  You can place anything within the calendar date boxes and drag and drop is supported.</description>
+    <releaseNotes>First release</releaseNotes>
+    <copyright>$copyright$</copyright>
+    <tags>calendar gridview grid planner agenda uwp</tags>
+
+  </metadata>
+
+  <files>
+    
+    <!-- XAML controls -->
+    <file src="Calendar.xaml" target="lib\uap10.0\Themes"/>
+
+  </files>
+</package>

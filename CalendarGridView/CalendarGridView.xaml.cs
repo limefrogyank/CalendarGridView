@@ -52,7 +52,7 @@ namespace CalendarGridView
                 }
             }
 
-            args.Handled = true;
+            //args.Handled = true;
         }
 
         private void CalendarView_SizeChanged(object sender, SizeChangedEventArgs e)
