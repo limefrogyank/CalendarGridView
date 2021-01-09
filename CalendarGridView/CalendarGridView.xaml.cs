@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
@@ -19,6 +20,7 @@ namespace CalendarGridView
     public sealed partial class CalendarGridView : UserControl
     {
         double _maxItemWidth = 300;
+        private ScrollViewer scroller;
 
         public CalendarGridView()
         {
@@ -27,6 +29,30 @@ namespace CalendarGridView
 
             calendarView.Loaded += CalendarView_Loaded;
             calendarView.SizeChanged += CalendarView_SizeChanged;
+            calendarView.ContainerContentChanging += CalendarView_ContainerContentChanging;
+        }
+
+        private void CalendarView_ContainerContentChanging(ListViewBase sender, ContainerContentChangingEventArgs args)
+        {
+            
+            if (AlternateMonthColors)
+            {
+                var calendarItem = args.Item as ICalendarItem;
+                if (calendarItem != null)
+                {
+                    if (calendarItem.Date.Month % 2 == 0)
+                    {
+                        args.ItemContainer.Background = (Brush)Application.Current.Resources["CalendarViewCalendarItemBackground"];
+                    }
+                    else
+                    {
+                        args.ItemContainer.Background = (Brush)Application.Current.Resources["CalendarViewOutOfScopeBackground"];
+                        //args.ItemContainer.Background = new SolidColorBrush(Colors.LightPink);
+                    }
+                }
+            }
+
+            args.Handled = true;
         }
 
         private void CalendarView_SizeChanged(object sender, SizeChangedEventArgs e)
@@ -42,8 +68,35 @@ namespace CalendarGridView
 
         private void CalendarGridView_Loaded(object sender, RoutedEventArgs e)
         {
-            var scroller = calendarView.GetFirstDescendantOfType<ScrollViewer>();
+            scroller = calendarView.GetFirstDescendantOfType<ScrollViewer>();
+            scroller.ViewChanging += Scroller_ViewChanging;
             scroller.ChangeView(null, scroller.ExtentHeight / 2, null);
+
+        }
+
+        private void Scroller_ViewChanging(object sender, ScrollViewerViewChangingEventArgs e)
+        {
+            var verticalOffset = e.NextView.VerticalOffset;
+            var itemHeight = ((ItemsWrapGrid)calendarView.ItemsPanelRoot).ItemHeight;
+            var rowAtTop = (int)Math.Ceiling(verticalOffset / itemHeight);
+            var itemIndexAtTop = rowAtTop * 7;
+            var container = calendarView.ContainerFromIndex(itemIndexAtTop);
+            if (container == null)
+                return;
+            var item = calendarView.ItemFromContainer(container);
+            var calendarItem = item as ICalendarItem;
+            if (calendarItem != null)
+            {
+                var nextMonth = new DateTime(calendarItem.Date.Month == 12 ? calendarItem.Date.Year + 1 : calendarItem.Date.Year, calendarItem.Date.Month == 12 ? 1 : calendarItem.Date.Month + 1, 1);
+                if ((nextMonth - calendarItem.Date).TotalDays < 7)
+                {
+                    MonthInView = nextMonth.Month;
+                }
+                else
+                {
+                    MonthInView = calendarItem.Date.Month;
+                }
+            }
         }
 
         private void ChangeItemSize(double panelWidth)
@@ -92,5 +145,38 @@ namespace CalendarGridView
 
 
 
+        public bool AlternateMonthColors
+        {
+            get { return (bool)GetValue(AlternateMonthColorsProperty); }
+            set { SetValue(AlternateMonthColorsProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for AlternateMonthColors.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty AlternateMonthColorsProperty =
+            DependencyProperty.Register("AlternateMonthColors", typeof(bool), typeof(CalendarGridView), new PropertyMetadata(default));
+
+
+
+
+        public int MonthInView
+        {
+            get { return (int)GetValue(MonthInViewProperty); }
+            private set { SetValue(MonthInViewProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for MonthInView.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty MonthInViewProperty =
+            DependencyProperty.Register("MonthInView", typeof(int), typeof(CalendarGridView), new PropertyMetadata(0));
+
+
+
+
+        private void todayButton_Tapped(object sender, TappedRoutedEventArgs e)
+        {
+            //var scroller = calendarView.GetFirstDescendantOfType<ScrollViewer>();
+            scroller.ChangeView(null, scroller.ExtentHeight / 2, null);
+        }
+
+        
     }
 }

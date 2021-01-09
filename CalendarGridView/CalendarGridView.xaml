@@ -10,50 +10,38 @@
     d:DesignWidth="400">
 
     <UserControl.Resources>
-        <ControlTemplate x:Key="dragContainerTemplate" TargetType="GridViewItem"
-                         >
-            <ListViewItemPresenter x:Name="ContentPresenter"
-                                  Grid.Row="1"
-                                  ContentTemplate="{TemplateBinding ContentTemplate}"
-                ContentTransitions="{TemplateBinding ContentTransitions}"
-                HorizontalAlignment="Stretch"
-                                   HorizontalContentAlignment="Stretch"
-                                   VerticalContentAlignment="Stretch"
-                VerticalAlignment="Stretch"
-                Margin="{TemplateBinding Padding}"
-                                   CheckMode="{ThemeResource GridViewItemCheckMode}"
-                        RevealBackground="{ThemeResource GridViewItemRevealBackground}"
-                        RevealBorderThickness="{ThemeResource GridViewItemRevealBorderThemeThickness}"
-                        RevealBorderBrush="{ThemeResource GridViewItemRevealBorderBrush}"/>
-            <!--<Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="*"/>
-                </Grid.RowDefinitions>
-                
-                
-                <TextBlock Text="Date" Style="{ThemeResource CaptionTextBlockStyle}"/>
-            </Grid>-->
-        </ControlTemplate>
-        
-        
+        <local:FullMonthConverter x:Key="FullMonthConverter" />
     </UserControl.Resources>
     
-    <GridView Header="CalendarView"
-              x:Name="calendarView"
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <StackPanel Orientation="Horizontal">
+            <Button x:Name="todayButton"
+                        Content="Today" 
+                        Tapped="todayButton_Tapped"
+                        />
+            <TextBlock Text="{x:Bind MonthInView, Converter={StaticResource FullMonthConverter}, Mode=OneWay}"/>
+        </StackPanel>
+
+        <GridView x:Name="calendarView"
+              Grid.Row="1"
               ItemsSource="{x:Bind ItemsSource, Mode=OneWay}"
               ItemTemplate="{x:Bind ItemTemplate, Mode=OneWay}"
               SelectionMode="None"                                  
               >
-        <GridView.ItemContainerStyle>
-            <Style TargetType="GridViewItem" BasedOn="{StaticResource GridViewItemRevealStyle}">
-                <Setter Property="Margin" Value="2" />
-                <Setter Property="Padding" Value="5" />
-                <Setter Property="VerticalContentAlignment" Value="Stretch"/>
-                <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
-                <!--<Setter Property="Template" Value="{StaticResource dragContainerTemplate}" />-->
-                
-            </Style>
-        </GridView.ItemContainerStyle>
-    </GridView>
+
+            <GridView.ItemContainerStyle>
+                <Style TargetType="GridViewItem" BasedOn="{StaticResource GridViewItemRevealStyle}">
+                    <Setter Property="Margin" Value="2" />
+                    <Setter Property="Padding" Value="5" />
+                    <Setter Property="VerticalContentAlignment" Value="Stretch"/>
+                    <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                </Style>
+            </GridView.ItemContainerStyle>
+        </GridView>
+    </Grid>
 </UserControl>

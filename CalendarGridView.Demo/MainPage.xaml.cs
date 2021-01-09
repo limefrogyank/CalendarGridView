@@ -14,6 +14,7 @@ using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 using CalendarGridView;
 using System.Threading.Tasks;
+using System.Diagnostics;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
 
@@ -45,6 +46,28 @@ namespace CalendarGridView.Demo
                 }
                 return Task.FromResult(list.ToArray());
             });
+        }
+
+        private void CalendarItemView_Drop(object sender, DragEventArgs e)
+        {
+
+        }
+
+        private void TextBlock_DragStarting(UIElement sender, DragStartingEventArgs args)
+        {
+            args.AllowedOperations = Windows.ApplicationModel.DataTransfer.DataPackageOperation.Copy | Windows.ApplicationModel.DataTransfer.DataPackageOperation.Move;
+            args.Data.SetText("TeST");
+            
+        }
+
+        private void CalendarItemView_DragOver(object sender, DragEventArgs e)
+        {
+            e.AcceptedOperation = Windows.ApplicationModel.DataTransfer.DataPackageOperation.Copy | Windows.ApplicationModel.DataTransfer.DataPackageOperation.Move;
+        }
+
+        private void CalendarItemView_DragLeave(object sender, DragEventArgs e)
+        {
+            Debug.WriteLine("Drag leave");
         }
     }
 }

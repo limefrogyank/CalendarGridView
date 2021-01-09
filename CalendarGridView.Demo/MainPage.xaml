@@ -10,17 +10,34 @@
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
     <Grid>
-        <control:CalendarGridView ItemsSource="{x:Bind CalendarItems, Mode=OneWay}">
+        <control:CalendarGridView ItemsSource="{x:Bind CalendarItems, Mode=OneWay}"
+                                  AlternateMonthColors="True">
             <control:CalendarGridView.ItemTemplate>
                 <DataTemplate x:DataType="local:CalendarItemViewModel">
-                    <control:CalendarItemView CalendarItem="{x:Bind}">
+                    <control:CalendarItemView CalendarItem="{x:Bind}"
+                                              AllowDrop="true"
+                                              Drop="CalendarItemView_Drop"
+                                              DragOver="CalendarItemView_DragOver"
+                                              DragLeave="CalendarItemView_DragLeave"
+                                              >
                         <control:CalendarItemView.ItemTemplate>
                             <DataTemplate x:DataType="local:CalendarItemViewModel">
                                 <Grid VerticalAlignment="Stretch"
                                       Padding="0,10">
-                                    <!--<TextBlock Text="{x:Bind ReadableDate}" />-->
-                                    <TextBlock Text="{x:Bind Test}"
+                                    <StackPanel VerticalAlignment="Stretch"
+                                      >
+                                        <!--<TextBlock Text="{x:Bind ReadableDate}" />-->
+                                        <TextBlock Text="{x:Bind Test}" CanDrag="True"
+                                                   DragStarting="TextBlock_DragStarting"
+                                                   
                                                VerticalAlignment="Top"/>
+                                        <TextBlock Text="{x:Bind Test}" CanDrag="True"
+                                               VerticalAlignment="Top"/>
+                                        <TextBlock Text="{x:Bind Test}" CanDrag="True"
+                                               VerticalAlignment="Top"/>
+                                    </StackPanel>
+                                    <!--<Grid IsHitTestVisible="False"
+                                          AllowDrop="true"/>-->
                                 </Grid>
                             </DataTemplate>
                         </control:CalendarItemView.ItemTemplate>

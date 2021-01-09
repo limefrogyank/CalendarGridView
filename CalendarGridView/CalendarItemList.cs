@@ -48,19 +48,44 @@ namespace CalendarGridView
 
         private List<DateTime> ConvertIndexRangeToDateTimeRange(ItemIndexRange range)
         {
-            //today is the middle of the list for now.
-            int todayIndex = _count / 2;
-            int roundedUp = (int)Math.Ceiling((double)todayIndex / 7) * 7;  // rounding up means splitting the listview exactly in the middle scrolls to the right "middle" date
-            //now adjust pivotDay to correct day of the week for calendar, but this only works for Sunday starts
-            roundedUp += (int)_pivotDay.DayOfWeek;
-
             var dates = new List<DateTime>();
-            for (var i = range.FirstIndex; i <= range.LastIndex; i++)
+            if (SplitMonths)
             {
 
-                dates.Add(_pivotDay + TimeSpan.FromDays(i - roundedUp));
+            }
+            else
+            {
+                //today is the middle of the list for now.
+                int todayIndex = _count / 2;
+                int roundedUp = (int)Math.Ceiling((double)todayIndex / 7) * 7;  // rounding up means splitting the listview exactly in the middle scrolls to the right "middle" date
+                                                                                //now adjust pivotDay to correct day of the week for calendar, but this only works for Sunday starts
+                roundedUp += (int)_pivotDay.DayOfWeek;
+
+                
+                for (var i = range.FirstIndex; i <= range.LastIndex; i++)
+                {
+                    dates.Add(_pivotDay + TimeSpan.FromDays(i - roundedUp));
+                }
             }
             return dates;
+        }
+
+        public int GetIndexForDate(DateTime dateTime)
+        {
+            if (SplitMonths)
+            {
+                throw new NotImplementedException();
+            }
+            else
+            {
+                //today is the middle of the list for now.
+                int todayIndex = _count / 2;
+                int roundedUp = (int)Math.Ceiling((double)todayIndex / 7) * 7;  // rounding up means splitting the listview exactly in the middle scrolls to the right "middle" date
+                                                                                //now adjust pivotDay to correct day of the week for calendar, but this only works for Sunday starts
+                roundedUp += (int)_pivotDay.DayOfWeek;
+                var span = dateTime - _pivotDay;
+                return roundedUp - (int)span.TotalDays;
+            }
         }
 
         //// Callback from itemcache that it needs items to be retrieved
@@ -121,7 +146,7 @@ namespace CalendarGridView
         //    }
         //}
 
-        public bool SplitMonths { get; set; } = true;
+        public bool SplitMonths { get; set; } = false;
 
 
         public bool IsFixedSize => false;
@@ -186,9 +211,9 @@ namespace CalendarGridView
 
         public void RangesChanged(ItemIndexRange visibleRange, IReadOnlyList<ItemIndexRange> trackedItems)
         {
-            string s = string.Format("* RangesChanged fired: Visible {0}->{1}", visibleRange.FirstIndex, visibleRange.LastIndex);
-            foreach (ItemIndexRange r in trackedItems) { s += string.Format(" {0}->{1}", r.FirstIndex, r.LastIndex); }
-            Debug.WriteLine(s);
+            //string s = string.Format("* RangesChanged fired: Visible {0}->{1}", visibleRange.FirstIndex, visibleRange.LastIndex);
+            //foreach (ItemIndexRange r in trackedItems) { s += string.Format(" {0}->{1}", r.FirstIndex, r.LastIndex); }
+            //Debug.WriteLine(s);
 
             // We know that the visible range is included in the broader range so don't need to hand it to the UpdateRanges call
             // Update the cache of items based on the new set of ranges. It will callback for additional data if required
