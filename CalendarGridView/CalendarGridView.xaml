@@ -1,0 +1,59 @@
+﻿<UserControl
+    x:Class="CalendarGridView.CalendarGridView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:CalendarGridView"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    d:DesignHeight="300"
+    d:DesignWidth="400">
+
+    <UserControl.Resources>
+        <ControlTemplate x:Key="dragContainerTemplate" TargetType="GridViewItem"
+                         >
+            <ListViewItemPresenter x:Name="ContentPresenter"
+                                  Grid.Row="1"
+                                  ContentTemplate="{TemplateBinding ContentTemplate}"
+                ContentTransitions="{TemplateBinding ContentTransitions}"
+                HorizontalAlignment="Stretch"
+                                   HorizontalContentAlignment="Stretch"
+                                   VerticalContentAlignment="Stretch"
+                VerticalAlignment="Stretch"
+                Margin="{TemplateBinding Padding}"
+                                   CheckMode="{ThemeResource GridViewItemCheckMode}"
+                        RevealBackground="{ThemeResource GridViewItemRevealBackground}"
+                        RevealBorderThickness="{ThemeResource GridViewItemRevealBorderThemeThickness}"
+                        RevealBorderBrush="{ThemeResource GridViewItemRevealBorderBrush}"/>
+            <!--<Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                
+                
+                <TextBlock Text="Date" Style="{ThemeResource CaptionTextBlockStyle}"/>
+            </Grid>-->
+        </ControlTemplate>
+        
+        
+    </UserControl.Resources>
+    
+    <GridView Header="CalendarView"
+              x:Name="calendarView"
+              ItemsSource="{x:Bind ItemsSource, Mode=OneWay}"
+              ItemTemplate="{x:Bind ItemTemplate, Mode=OneWay}"
+              SelectionMode="None"                                  
+              >
+        <GridView.ItemContainerStyle>
+            <Style TargetType="GridViewItem" BasedOn="{StaticResource GridViewItemRevealStyle}">
+                <Setter Property="Margin" Value="2" />
+                <Setter Property="Padding" Value="5" />
+                <Setter Property="VerticalContentAlignment" Value="Stretch"/>
+                <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                <!--<Setter Property="Template" Value="{StaticResource dragContainerTemplate}" />-->
+                
+            </Style>
+        </GridView.ItemContainerStyle>
+    </GridView>
+</UserControl>

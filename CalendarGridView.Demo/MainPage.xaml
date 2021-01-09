@@ -1,0 +1,33 @@
+﻿<Page
+    x:Class="CalendarGridView.Demo.MainPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:CalendarGridView.Demo"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:control="using:CalendarGridView"
+    mc:Ignorable="d"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+
+    <Grid>
+        <control:CalendarGridView ItemsSource="{x:Bind CalendarItems, Mode=OneWay}">
+            <control:CalendarGridView.ItemTemplate>
+                <DataTemplate x:DataType="local:CalendarItemViewModel">
+                    <control:CalendarItemView CalendarItem="{x:Bind}">
+                        <control:CalendarItemView.ItemTemplate>
+                            <DataTemplate x:DataType="local:CalendarItemViewModel">
+                                <Grid VerticalAlignment="Stretch"
+                                      Padding="0,10">
+                                    <!--<TextBlock Text="{x:Bind ReadableDate}" />-->
+                                    <TextBlock Text="{x:Bind Test}"
+                                               VerticalAlignment="Top"/>
+                                </Grid>
+                            </DataTemplate>
+                        </control:CalendarItemView.ItemTemplate>
+                    </control:CalendarItemView>
+                    
+                </DataTemplate>
+            </control:CalendarGridView.ItemTemplate>
+        </control:CalendarGridView>
+    </Grid>
+</Page>
