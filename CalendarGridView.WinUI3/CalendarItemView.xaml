@@ -1,0 +1,34 @@
+﻿<UserControl
+    x:Class="McPhersonApps.CalendarItemView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:McPhersonApps"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+    
+    <UserControl.Resources>
+        <local:DateConverter x:Key="DateConverter"/>
+
+    </UserControl.Resources>
+
+    <Grid x:Name="grid"
+          AllowDrop="{x:Bind AllowDrop, Mode=OneWay}"
+          VerticalAlignment="Stretch"
+          Background="Transparent">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition />
+        </Grid.RowDefinitions>
+
+
+        <TextBlock Text="{x:Bind CalendarItem, Converter={StaticResource DateConverter}, Mode=OneWay}"
+                   Style="{ThemeResource CaptionTextBlockStyle}"
+                   Foreground="{ThemeResource SystemAccentColor}"
+                   IsHitTestVisible="False"/>
+
+        <ContentControl ContentTemplate="{x:Bind ItemTemplate}"  
+                        VerticalContentAlignment="Stretch"
+                        Grid.Row="1" />
+    </Grid>
+</UserControl>
